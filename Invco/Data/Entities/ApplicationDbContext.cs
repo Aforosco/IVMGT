@@ -11,9 +11,9 @@ namespace Invco.Data.Entities
 
         }
 
-        public DbSet<Asset>? Assets { get; set; }
-        public DbSet<Category>? Categories { get; set; }
-        public DbSet<Department>? Departments { get; set; }
+        public DbSet<Asset> Assets { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Department> Departments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

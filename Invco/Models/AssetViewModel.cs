@@ -14,14 +14,16 @@ namespace Invco.Models
 
         public string? AssetUser { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime? Purchasedate { get; set; }
         
         public int CategoryId { get; set; }
+        public string? CategoryName { get; set; }
 
         public string? SerialNumber { get; set; }
        
         public int DepartmentId { get; set; }
-        
+        public string? DepartmentName { get; set; }
     }
 }
 

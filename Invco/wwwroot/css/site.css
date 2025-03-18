@@ -21,3 +21,59 @@ body {
     margin-bottom: 60px;
     background-color: #FFF9C4;
 }
+
+.heading {
+    font-weight: 900;
+}
+.right {
+  
+   
+   
+    height: auto; 
+    border-radius: 10px;
+}
+
+.landing {
+    margin-top: 20px;
+    padding : 10px;
+}
+
+#accordionFlushExample {
+    margin-top: 20px;
+}
+
+.AssetBtn {
+    --bs-btn-padding-y: .25rem;
+    --bs-btn-padding-x: .5rem;
+    --bs-btn-font-size: .75rem
+}
+.assetcard {
+    background-color: #fc9003;
+}
+.assetcardh {
+    background-color: #b1fc03;
+}
+
+.singlecard {
+    border-radius: 12px;
+    max-width: 100%;
+    text-align: center; 
+}
+
+dl {
+    text-align: left; 
+}
+
+dt {
+    color: #333;
+}
+
+dd {
+    font-weight: 500;
+}
+
+.ass{
+    color:green;
+}
+
+

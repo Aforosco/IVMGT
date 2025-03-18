@@ -32,7 +32,11 @@ namespace Invco.Service
             var Dept = _idr.GetAllDepartments();
             var viewModel = new AllDepartmentViewModel
             {
-                departments = Dept.Adapt<List<DepartmentViewModel>>()
+                departments = Dept.Select(d => new DepartmentViewModel
+                {
+                    Id = d.Id,
+                    DepartmentName = d.DepartmentName
+                }).ToList()
             };
             return viewModel;
         }

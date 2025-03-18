@@ -16,6 +16,9 @@
     <None Remove="Service\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="wwwroot\Images\Asset.jpg" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
   </ItemGroup>
 
@@ -35,5 +38,11 @@
     <Folder Include="Data\Entities\" />
     <Folder Include="Repository\" />
     <Folder Include="Service\" />
+    <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\fabio-oyXis2kALVg-unsplash.jpg" />
+    <Content Remove="wwwroot\Images\" />
+    <Content Remove="wwwroot\Images\Asset.jpg" />
   </ItemGroup>
 </Project>

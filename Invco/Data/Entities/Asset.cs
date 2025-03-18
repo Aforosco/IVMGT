@@ -15,10 +15,10 @@ namespace Invco.Data.Entities
 		public string? AssetUser { get; set; }
         public string? SerialNumber { get; set; }
         public DateTime? Purchasedate { get; set; }
-		[ForeignKey("Id")]
-		public int CategoryId { get; set; }
+        [ForeignKey("Category")]
+        public int CategoryId { get; set; }
 		public virtual Category? Category { get; set; }
-        [ForeignKey("Id")]
+        [ForeignKey("Departments")]
         public int DepartmentId { get; set; }
 		public virtual Department? Departments { get; set; }
 

@@ -7,7 +7,7 @@ namespace Invco.Repository
 	public interface IDepartmentRepo
 	{
         void InsertDepartment(Department D);
-        Task<List<Department>> GetAllDepartments();
+        List<Department> GetAllDepartments();
         void DeleteDepartment(int Id);
 
 
@@ -27,9 +27,9 @@ namespace Invco.Repository
             _db.Departments.Remove(deleteItem);
         }
 
-        public async Task<List<Department>> GetAllDepartments()
+        public List<Department> GetAllDepartments()
         {
-            return await _db.Departments.ToListAsync();
+            return  _db.Departments.ToList();
         }
 
         public void InsertDepartment(Department D)

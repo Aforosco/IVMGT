@@ -31,7 +31,12 @@ namespace Invco.Service
             var cat = _icr.GetAllCategories();
             var viewModel = new AllCategoryViewModel
             {
-                Categories = cat.Adapt<List<CategoryViewModel>>()
+                Categories = cat.Select(a => new CategoryViewModel
+                {
+                    Id = a.Id,
+                    CategoryName = a.CategoryName
+
+                }).ToList()
             };
             return viewModel;
         }

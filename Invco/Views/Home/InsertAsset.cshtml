@@ -1,64 +1,89 @@
 @model Invco.Models.CreateAssetViewModel
 
-@{
-    Layout = null;
-}
+<body class="container mt-5">
+    <div class="row">
+        <div class="card assetcard col-md-6 offset-md-3">
+            <div class="card-header assetcardh">
+                <h4 class="mb-3 d-flex justify-content-center ">REGISTER ASSET</h4>
+            </div>
+            <div class="card-body">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <form asp-action="InsertAsset">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-<!DOCTYPE html>
+                            <!-- Asset Name -->
+                            <div class="mb-3">
+                                <label asp-for="AssetName" class="form-label">Asset Name</label>
+                                <input asp-for="AssetName" class="form-control" placeholder="Enter asset name" />
+                                <span asp-validation-for="AssetName" class="text-danger"></span>
+                            </div>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>InsertAsset</title>
-</head>
-<body>
+                            <!-- Asset User -->
+                            <div class="mb-3">
+                                <label asp-for="AssetUser" class="form-label">Asset User</label>
+                                <input asp-for="AssetUser" class="form-control" placeholder="Enter user name" />
+                                <span asp-validation-for="AssetUser" class="text-danger"></span>
+                            </div>
 
-<h4>CreateAssetViewModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="InsertAsset">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="AssetName" class="control-label"></label>
-                <input asp-for="AssetName" class="form-control" />
-                <span asp-validation-for="AssetName" class="text-danger"></span>
+                            <!-- Purchase Date -->
+                            <div class="mb-3">
+                                <label asp-for="Purchasedate" class="form-label">Purchase Date</label>
+                                <input asp-for="Purchasedate" type="date" class="form-control" />
+                                <span asp-validation-for="Purchasedate" class="text-danger"></span>
+                            </div>
+
+                            <!-- Category (Dropdown) -->
+                            <div class="mb-3">
+                                <label asp-for="CategoryId" class="form-label">Asset Category</label>
+                                <select asp-for="CategoryId" class="form-select">
+                                    <option value="">Select Category</option>
+                                    @* Dynamically load categories *@
+                                    @foreach (var category in ViewBag.Categories)
+                                    {
+                                        <option value="@category.Id">@category.CategoryName</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                            </div>
+
+                            <!-- Serial Number -->
+                            <div class="mb-3">
+                                <label asp-for="SerialNumber" class="form-label">Serial Number</label>
+                                <input asp-for="SerialNumber" class="form-control" placeholder="Enter serial number" />
+                                <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                            </div>
+
+                            <!-- Department (Dropdown) -->
+                            <div class="mb-3">
+                                <label asp-for="DepartmentId" class="form-label">Department</label>
+                                <select asp-for="DepartmentId" class="form-select">
+                                    <option value="">Select Department</option>
+                                    @* Dynamically load departments *@
+                                    @foreach (var department in ViewBag.Departments)
+                                    {
+                                        <option value="@department.Id">@department.DepartmentName</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Register
+                                </button>
+                                <a asp-action="Index" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Assets
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
             </div>
-            <div class="form-group">
-                <label asp-for="AssetUser" class="control-label"></label>
-                <input asp-for="AssetUser" class="form-control" />
-                <span asp-validation-for="AssetUser" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Purchasedate" class="control-label"></label>
-                <input asp-for="Purchasedate" class="form-control" />
-                <span asp-validation-for="Purchasedate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <input asp-for="CategoryId" class="form-control" />
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SerialNumber" class="control-label"></label>
-                <input asp-for="SerialNumber" class="form-control" />
-                <span asp-validation-for="SerialNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DepartmentId" class="control-label"></label>
-                <input asp-for="DepartmentId" class="form-control" />
-                <span asp-validation-for="DepartmentId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 </body>
-</html>
+
+

@@ -7,7 +7,7 @@ namespace Invco.Repository
 	public interface ICategoryRepo
 	{
         void InsertCategory(Category C);
-        Task<List<Category>> GetAllCategories();
+        List<Category> GetAllCategories();
         void DeleteCategory(int Id);
 
 
@@ -27,9 +27,9 @@ namespace Invco.Repository
             _db.Categories.Remove(deleteItem);
         }
 
-        public async Task<List<Category>> GetAllCategories()
+        public List<Category> GetAllCategories()
         {
-            return await _db.Categories.ToListAsync();
+            return  _db.Categories.ToList();
         }
 
         public void InsertCategory(Category C)

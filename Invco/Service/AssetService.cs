@@ -12,7 +12,7 @@ namespace Invco.Service
         void InsertAsset(CreateAssetViewModel A);
         AllAssetViewModel GetAllAsset(int page = 1);
         AllAssetViewModel GetAllAssetByDepartmentId(int Id,int page=1);
-        Asset GetSingleAsset(int Id);
+        AssetViewModel GetSingleAsset(int Id);
         void DeleteAsset(int Id);
         void UpdateAsset(EditAssetViewModel A);
     }
@@ -33,12 +33,23 @@ namespace Invco.Service
         public AllAssetViewModel GetAllAsset(int page =1 )
         {
             int pageSize = 10;
-            var allasset=   _iar.GetAllAsset(page);
+            var allAssets=   _iar.GetAllAsset(page);
             var totalCount =  _iar.GetAssetCount();
 
             var viewModel = new AllAssetViewModel
             {
-                Assets = allasset.Adapt<List<AssetViewModel>>(), 
+                Assets = allAssets.Select(a => new AssetViewModel
+                {
+                    Id = a.Id,
+                    AssetName = a.AssetName,
+                    AssetUser = a.AssetUser,
+                    Purchasedate = a.Purchasedate,
+                    SerialNumber = a.SerialNumber,
+                    CategoryId = a.CategoryId,
+                    CategoryName = a.Category?.CategoryName, // Map category name
+                    DepartmentId = a.DepartmentId,
+                    DepartmentName = a.Departments?.DepartmentName // Map department name
+                }).ToList(),
                 CurrentPage = page,
                 TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
             };
@@ -62,10 +73,31 @@ namespace Invco.Service
             return viewModel;
         }
 
-        public Asset GetSingleAsset(int Id)
+        public AssetViewModel GetSingleAsset(int Id)
         {
-            var assets = _iar.GetSingleAsset(Id);
-            return assets;
+            var asset = _iar.GetSingleAsset(Id);
+
+           if (asset == null)
+            {
+                throw new KeyNotFoundException($"Asset with ID {Id} was not found");
+            }
+
+            return new AssetViewModel
+            {
+                Id = asset.Id,
+                AssetName = asset.AssetName,
+                AssetUser = asset.AssetUser,
+                Purchasedate = asset.Purchasedate,
+                SerialNumber = asset.SerialNumber,
+                CategoryId = asset.CategoryId,
+                DepartmentId = asset.DepartmentId,
+
+                // Explicitly mapping the navigation properties
+                CategoryName = asset.Category?.CategoryName ?? "N/A",
+                DepartmentName = asset.Departments?.DepartmentName ?? "N/A"
+            };
+
+
         }
 
         public void InsertAsset(CreateAssetViewModel A)

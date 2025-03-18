@@ -5,6 +5,7 @@ using Invco.Repository;
 using Invco.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Invco.Service;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Invco.Controllers;
 
@@ -35,6 +36,7 @@ public class HomeController : Controller
     {
         var Assets = _ias.GetAllAsset();
 
+
         return View(Assets);
     }
 
@@ -46,18 +48,32 @@ public class HomeController : Controller
         return View(Assets);
     }
 
+
+
+    [HttpGet]
+    public IActionResult InsertAsset()
+    {
+        ViewBag.Categories = _cs.GetAllCategories().Categories;
+        ViewBag.Departments = _ds.GetAllDepartments().departments;
+
+        return View();
+    }
+
+
     [HttpPost]
 
     public IActionResult InsertAsset(CreateAssetViewModel model)
     {
         if (!ModelState.IsValid)
         {
+            ViewBag.Categories = _cs.GetAllCategories().Categories ?? new List<CategoryViewModel>();
+            ViewBag.Departments = _ds.GetAllDepartments().departments ?? new List<DepartmentViewModel>();
             return View(model);
         }
-
+      
         _ias.InsertAsset(model);
 
-        return View();
+        return RedirectToAction("GetAllAssets");
     }
 
 
@@ -70,40 +86,61 @@ public class HomeController : Controller
 
 
     }
-
     [HttpGet]
     public IActionResult UpdateAssetViewModel(int Id)
     {
         var Asset = _ias.GetSingleAsset(Id);
         if (Asset == null)
             return NotFound();
+
         var model = new EditAssetViewModel
         {
             AssetName = Asset.AssetName,
             AssetUser = Asset.AssetUser,
+            Purchasedate = Asset.Purchasedate,
             SerialNumber = Asset.SerialNumber,
+            CategoryId = Asset.CategoryId,
+            CategoryName = Asset.CategoryName,
             DepartmentId = Asset.DepartmentId,
-            CategoryId = Asset.CategoryId   
-
+            DepartmentName = Asset.CategoryName
         };
+
+        // Fetch categories and departments for dropdowns
+        ViewBag.Categories = _cs.GetAllCategories().Categories
+                                .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.CategoryName })
+                                .ToList();
+
+        ViewBag.Departments = _ds.GetAllDepartments().departments
+                          .Select(d => new SelectListItem
+                          {
+                              Value = d.Id.ToString(),
+                              Text = d.DepartmentName
+                          })
+                          .ToList();
 
         return View(model);
     }
 
     [HttpPost]
-
     public IActionResult UpdateAssetViewModel(EditAssetViewModel eavm)
     {
         if (!ModelState.IsValid)
         {
+            // Reload dropdown lists
+            ViewBag.Categories = _cs.GetAllCategories().Categories
+                .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.CategoryName })
+                .ToList();
+
+            ViewBag.Departments = _ds.GetAllDepartments().departments
+                .Select(d => new SelectListItem { Value = d.Id.ToString(), Text = d.DepartmentName })
+                .ToList();
+
             return View(eavm);
         }
+
         _ias.UpdateAsset(eavm);
         return RedirectToAction("GetAllAssets");
-
-
     }
-
 
     [HttpGet]
     public IActionResult GetAssetDetails(int Id)
