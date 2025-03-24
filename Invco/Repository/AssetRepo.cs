@@ -32,6 +32,7 @@ namespace Invco.Repository
             if (deleteItem == null)
                 throw new KeyNotFoundException($"Itemm with ID {Id} was not found");
             _db.Assets.Remove(deleteItem);
+            _db.SaveChanges();
         }
 
         public List<Asset> GetAllAsset(int page = 1)

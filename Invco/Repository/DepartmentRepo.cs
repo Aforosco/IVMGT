@@ -9,6 +9,7 @@ namespace Invco.Repository
         void InsertDepartment(Department D);
         List<Department> GetAllDepartments();
         void DeleteDepartment(int Id);
+        int GetDepartmentCount();
 
 
     }
@@ -36,6 +37,11 @@ namespace Invco.Repository
         {
             _db.Departments.Add(D);
             _db.SaveChanges();
+        }
+
+        public int GetDepartmentCount()
+        {
+            return _db.Departments.Count();
         }
     }
 }

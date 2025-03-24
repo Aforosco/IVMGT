@@ -1,5 +1,15 @@
 @model Invco.Models.AssetViewModel
 
+@{
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "_LayoutPage2";
+    }
+    else
+    {
+        Layout = "_Layout"; // Default general layout
+    }
+}
 
 <body>
 
@@ -10,28 +20,28 @@
                 <i class="fas fa-box"></i> Asset Details
             </h4>
             <dl class="row  ">
-                
-                    <dt class="col-sm-3 fw-bold"><i class="fas fa-id-badge"></i> ID</dt>
-                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Id)</dd>
 
-                    <dt class="col-sm-3 fw-bold"><i class="fas fa-tag"></i> Asset Name</dt>
-                    <dd class="col-sm-9">@Html.DisplayFor(model => model.AssetName)</dd>
+                <dt class="col-sm-3 fw-bold"><i class="fas fa-id-badge"></i> ID</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Id)</dd>
 
-                    <dt class="col-sm-3 fw-bold"><i class="fas fa-user"></i> Asset User</dt>
-                    <dd class="col-sm-9">@Html.DisplayFor(model => model.AssetUser)</dd>
+                <dt class="col-sm-3 fw-bold"><i class="fas fa-tag"></i> Asset Name</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.AssetName)</dd>
 
-                    <dt class="col-sm-3 fw-bold"><i class="fas fa-calendar-alt"></i> Purchase Date</dt>
-                    <dd class="col-sm-9">@Html.DisplayFor(model => model.Purchasedate)</dd>
+                <dt class="col-sm-3 fw-bold"><i class="fas fa-user"></i> Asset User</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.AssetUser)</dd>
 
-                    <dt class="col-sm-3 fw-bold"><i class="fas fa-list"></i> Category</dt>
-                    <dd class="col-sm-9">@Html.DisplayFor(model => model.CategoryName)</dd>
+                <dt class="col-sm-3 fw-bold"><i class="fas fa-calendar-alt"></i> Purchase Date</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.Purchasedate)</dd>
 
-                    <dt class="col-sm-3 fw-bold"><i class="fas fa-barcode"></i> Serial Number</dt>
-                    <dd class="col-sm-9">@Html.DisplayFor(model => model.SerialNumber)</dd>
+                <dt class="col-sm-3 fw-bold"><i class="fas fa-list"></i> Category</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.CategoryName)</dd>
 
-                    <dt class="col-sm-3 fw-bold"><i class="fas fa-building"></i> Department</dt>
-                    <dd class="col-sm-9">@Html.DisplayFor(model => model.DepartmentName)</dd>
-               
+                <dt class="col-sm-3 fw-bold"><i class="fas fa-barcode"></i> Serial Number</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.SerialNumber)</dd>
+
+                <dt class="col-sm-3 fw-bold"><i class="fas fa-building"></i> Department</dt>
+                <dd class="col-sm-9">@Html.DisplayFor(model => model.DepartmentName)</dd>
+
             </dl>
         </div>
 

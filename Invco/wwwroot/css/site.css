@@ -71,9 +71,313 @@ dt {
 dd {
     font-weight: 500;
 }
-
-.ass{
-    color:green;
+.sidebar {
+    min-height: 100vh;
+    height: auto;
 }
 
+:root {
+    --primary-color: #191919;
+    --primary: #565DE9;
+    --white: #FFFFFF;
+    --sidebar-primary-hover: #EBEFFD;
+    --sidebar-bg: #ffffff;
+    --bg: #DEE0E5;
+    --text: #9803fc;
+    --text-link: #9803fc;
+    --expand-button: #565DE9;
+    --logout: #FA7575;
+    --search-bg: #EBEFFD;
+}
+
+/* Global Styles 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+    
+ body.Admin {
+    height: 100%;
+    font-family: 'Work Sans', sans-serif;
+    font-size: 16px;
+    background: var(--bg);
+    padding: 1rem;
+}
+   
+/* Sidebar 
+.sidebar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    min-height: 100vh;
+    max-width: 18rem;
+    min-width: 4rem;
+    padding: 1.5rem 1rem;
+    border-radius: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    background: var(--sidebar-bg);
+    color: var(--white);
+    transition: max-width 0.2s ease-in-out;
+}
+
+/* Collapsed Sidebar 
+body.collapsed .sidebar {
+    max-width: 5rem;
+}
+
+body.collapsed .hide {
+    position: absolute;
+    visibility: hidden;
+}
+
+/* Separator 
+.seperator {
+    width: 100%;
+    height: 1px;
+    background: var(--sidebar-primary-hover);
+    margin: 1rem 0;
+}
+
+/* Search Wrapper *
+.search_wrapper {
+    position: relative;
+}
+
+    .search_wrapper input {
+        background: var(--search-bg);
+        width: 100%;
+        min-height: 3rem;
+        color: var(--text);
+        border-radius: 0.75rem;
+        padding-left: 2.75rem;
+        font-size: 1.4rem;
+        border: none;
+    }
+
+        .search_wrapper input::placeholder {
+            color: var(--text);
+            font-size: 1.2rem;
+        }
+
+body.collapsed .search_wrapper input::placeholder {
+    color: transparent;
+}
+
+.search_wrapper input:focus {
+    outline: 2px solid var(--primary);
+}
+
+.search_wrapper svg {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    left: 0.75rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke: var(--text);
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+/* Sidebar Top *
+.sidebar-top-wrapper {
+    display: flex;
+    background: var(--primary-color-light);
+}
+
+.sidebar-top {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: column;
+    height: 4rem;
+    padding-bottom: 1rem;
+}
+
+.logo_wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 0.6rem;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.35rem;
+    color: var(--text);
+}
+
+.logo-small {
+    width: 120px; 
+    height: auto; 
+    object-fit: contain; 
+    overflow: hidden;
+}
+
+.company-name {
+    white-space: nowrap;
+}
+
+/* Sidebar Links *
+.sidebar-links {
+    margin-top: 1rem;
+}
+
+    .sidebar-links ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        row-gap: 0.5rem;
+    }
+
+    .sidebar-links li {
+        min-width: 3rem;
+    }
+
+        .sidebar-links li a {
+            display: flex;
+            gap: 0.75rem;
+            width: 100%;
+            padding-left: 0.6rem;
+            font-size: 1.25rem;
+            min-height: 3.25rem;
+            border-radius: 0.75rem;
+            color: var(--text);
+            text-decoration: none;
+            transition: background 0.2s ease-in-out;
+            align-items: center;
+        }
+
+            .sidebar-links li a:hover {
+                background: var(--sidebar-primary-hover);
+                color: var(--text-link);
+            }
+
+                .sidebar-links li a:hover svg {
+                    stroke: var(--text-link);
+                }
+
+    .sidebar-links .active {
+        background: var(--sidebar-primary-hover);
+        color: var(--text-link);
+        text-decoration: none;
+    }
+
+        .sidebar-links .active svg {
+            stroke: var(--text-link);
+        }
+
+/* Tooltip 
+.tooltip {
+    position: relative;
+}
+
+    .tooltip .tooltip_content {
+        visibility: hidden;
+        background: var(--primary);
+        color: var(--white);
+        text-align: center;
+        border-radius: 6px;
+        padding: 0.35rem 0.75rem;
+        position: absolute;
+        z-index: 1;
+        left: 4.5rem;
+    }
+
+        .tooltip .tooltip_content::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent var(--primary) transparent transparent;
+        }
+
+body.collapsed .tooltip:hover .tooltip_content,
+body.collapsed .tooltip:focus .tooltip_content {
+    visibility: visible;
+}
+
+/* Sidebar Profile *
+.sidebar_profile {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 2.5rem;
+    margin-top: auto;
+    color: var(--text-link);
+}
+
+.avatar_wrapper {
+    position: relative;
+    display: flex;
+}
+
+.avatar {
+    width: 3rem;
+    height: 3rem;
+    object-fit: cover;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s ease-in-out;
+}
+
+    .avatar:hover {
+        border: 2px solid var(--primary);
+    }
+
+.avatar_name {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    white-space: nowrap;
+}
+
+.user-name {
+    font-weight: 600;
+    text-align: left;
+    color: var(--text);
+}
+
+.email {
+    color: var(--text);
+    font-size: 0.8rem;
+}
+
+.logout {
+    margin-left: auto;
+}
+
+    .logout svg {
+        color: var(--logout);
+    }
+
+/* Expand Button 
+.expand-btn {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    background: var(--expand-button);
+    z-index: 2;
+    right: -1rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: none;
+    border-radius: 50%;
+}
+
+    .expand-btn svg {
+        transform: rotate(-180deg);
+        width: 2.25rem;
+        height: 2.25rem;
+        stroke: var(--white);
+    }
+
+body.collapsed .expand-btn svg {
+    transform: rotate(-360deg);
+}
 

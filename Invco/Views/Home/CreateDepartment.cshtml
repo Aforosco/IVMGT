@@ -1,39 +1,94 @@
 @model Invco.Models.CreateDepartmentViewModel
 
 @{
-    Layout = null;
+    Layout = "_LayoutPage2";
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>CreateDepartment</title>
-</head>
 <body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4>Create Department</h4>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="CreateDepartment">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-<h4>CreateDepartmentViewModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CreateDepartment">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="DepartmentName" class="control-label"></label>
-                <input asp-for="DepartmentName" class="form-control" />
-                <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                            <div class="mb-3">
+                                <label asp-for="DepartmentName" class="form-label fw-bold"></label>
+                                <input asp-for="DepartmentName" class="form-control" placeholder="Enter Department Name" />
+                                <span asp-validation-for="DepartmentName" class="text-danger"></span>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="text-center mt-3">
+                    <a asp-action="Index" class="btn btn-outline-secondary">← Back to List</a>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 </body>
-</html>
+
+<script>document.addEventListener('DOMContentLoaded', function () {
+        // Select all delete buttons (assuming they have the class "delete")
+        const deleteButtons = document.querySelectorAll('.delete');
+
+        deleteButtons.forEach(function (button) {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent default link behavior
+                const deleteUrl = this.getAttribute('href');
+                const row = this.closest('tr'); // Find the closest table row
+
+                if (confirm("Are you sure you want to delete this item?")) {
+                    fetch(deleteUrl, {
+                        method: 'POST'
+                    })
+                        .then(function (response) {
+                            if (!response.ok) {
+                                throw new Error(response.statusText);
+                            }
+                            return response.text(); // or response.json(), depending on your API
+                        })
+                        .then(function (data) {
+                            // Fade out the row using CSS transition
+                            row.style.transition = "opacity 0.5s ease";
+                            row.style.opacity = 0;
+                            setTimeout(function () {
+                                row.remove();
+                            }, 500);
+
+                            // Show success toast
+                            Toastify({
+                                text: "Asset has been deleted successfully!",
+                                duration: 3000,
+                                close: true,
+                                gravity: "Top",
+                                position: "right",
+                                backgroundColor: "#28a745"
+                            }).showToast();
+                        })
+                        .catch(function (error) {
+                            // Show error toast if deletion fails
+                            Toastify({
+                                text: "Error deleting item: " + error.message,
+                                duration: 3000,
+                                close: true,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "#dc3545"
+                            }).showToast();
+                        });
+                }
+            });
+        });
+    });</script>

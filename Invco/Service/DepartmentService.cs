@@ -1,5 +1,6 @@
 ﻿using System;
 using Invco.Data.Entities;
+using Invco.Data.Migrations;
 using Invco.Models;
 using Invco.Repository;
 using Mapster;
@@ -11,6 +12,7 @@ namespace Invco.Service
         void InsertDepartment(CreateDepartmentViewModel D);
         AllDepartmentViewModel GetAllDepartments();
         void DeleteDepartment(int Id);
+        int GetDepartmentCount();
     }
 
 	
@@ -45,6 +47,11 @@ namespace Invco.Service
         {
             var newDept = D.Adapt<Department>();
             _idr.InsertDepartment(newDept);
+        }
+
+        public int GetDepartmentCount()
+        {
+            return _idr.GetDepartmentCount();
         }
     }
 }

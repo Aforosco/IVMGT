@@ -11,6 +11,7 @@ namespace Invco.Service
         void InsertCategory(CreateCategoryViewModel C);
         AllCategoryViewModel GetAllCategories();
         void DeleteCategory(int Id);
+        int GetCategoryCount();
 
     }
     public class CategoryService :ICategoryService
@@ -44,6 +45,11 @@ namespace Invco.Service
         {
             var newCategory = C.Adapt<Category>();
             _icr.InsertCategory(newCategory);
+        }
+
+        public int GetCategoryCount()
+        {
+            return _icr.GetCategoryCount();
         }
     }
 }

@@ -1,49 +1,102 @@
-@model IEnumerable<Invco.Models.CategoryViewModel>
+@model Invco.Models.AllCategoryViewModel
 
 @{
-    Layout = null;
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "_LayoutPage2";
+    }
+    else
+    {
+        Layout = "_Layout"; // Default general layout
+    }
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>GetCategories</title>
-</head>
 <body>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CategoryName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CategoryName)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="container mt-4">
+        <h2 class="text-center">Categories</h2>
+        <p>
+            <a asp-action="CreateCategory" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Create New
+            </a>
+        </p>
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Categories.First().Id)</th>
+                    <th>@Html.DisplayNameFor(model => model.Categories.First().CategoryName)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Categories)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                        <td>
+                            <a href="@Url.Action("DeleteCategory", "Home", new { id = item.Id })" class="btn btn-danger btn-sm delete">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
 </body>
-</html>
+
+<script>document.addEventListener('DOMContentLoaded', function () {
+        // Select all delete buttons (assuming they have the class "delete")
+        const deleteButtons = document.querySelectorAll('.delete');
+
+        deleteButtons.forEach(function (button) {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent default link behavior
+                const deleteUrl = this.getAttribute('href');
+                const row = this.closest('tr'); // Find the closest table row
+
+                if (confirm("Are you sure you want to delete this item?")) {
+                    fetch(deleteUrl, {
+                        method: 'POST'
+                    })
+                        .then(function (response) {
+                            if (!response.ok) {
+                                throw new Error(response.statusText);
+                            }
+                            return response.text(); // or response.json(), depending on your API
+                        })
+                        .then(function (data) {
+                            // Fade out the row using CSS transition
+                            row.style.transition = "opacity 0.5s ease";
+                            row.style.opacity = 0;
+                            setTimeout(function () {
+                                row.remove();
+                            }, 500);
+
+                            // Show success toast
+                            Toastify({
+                                text: "Asset has been deleted successfully!",
+                                duration: 3000,
+                                close: true,
+                                gravity: "Top",
+                                position: "right",
+                                backgroundColor: "#28a745"
+                            }).showToast();
+                        })
+                        .catch(function (error) {
+                            // Show error toast if deletion fails
+                            Toastify({
+                                text: "Error deleting item: " + error.message,
+                                duration: 3000,
+                                close: true,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "#dc3545"
+                            }).showToast();
+                        });
+                }
+            });
+        });
+    });</script>

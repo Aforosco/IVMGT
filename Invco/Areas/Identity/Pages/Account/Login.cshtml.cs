@@ -93,6 +93,11 @@ namespace Invco.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    if (User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("IndexDashboard", "Dashboard");
+
+                    }
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

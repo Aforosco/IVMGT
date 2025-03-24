@@ -1,39 +1,42 @@
-@model Invco.Models.CreateCategoryViewModel
+@model Invco.Models.CategoryViewModel
 
 @{
-    Layout = null;
+    Layout = "_LayoutPage2";
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>CreateCategory</title>
-</head>
 <body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4>Create Category</h4>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="CreateCategory">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
-<h4>CreateCategoryViewModel</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="CreateCategory">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="CategoryName" class="control-label"></label>
-                <input asp-for="CategoryName" class="form-control" />
-                <span asp-validation-for="CategoryName" class="text-danger"></span>
+                            <div class="mb-3">
+                                <label asp-for="CategoryName" class="form-label fw-bold">Category Name</label>
+                                <input asp-for="CategoryName" class="form-control" placeholder="Enter Category Name" />
+                                <span asp-validation-for="CategoryName" class="text-danger"></span>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="text-center mt-3">
+                    <a asp-action="Index" class="btn btn-outline-secondary">← Back to List</a>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+    
 </body>
-</html>
+

@@ -166,7 +166,12 @@ public class HomeController : Controller
         _cs.DeleteCategory(Id);
 
     }
+    [HttpGet]
+    public IActionResult CreateCategory()
+    {
 
+        return View();
+    }
 
     [HttpPost]
     public IActionResult CreateCategory(CreateCategoryViewModel cvm)
@@ -190,10 +195,16 @@ public class HomeController : Controller
     {
 
         _ds.DeleteDepartment(Id);
-
+        
     }
 
 
+    [HttpGet]
+    public IActionResult CreateDepartment()
+    {
+       
+        return View();
+    }
     [HttpPost]
     public IActionResult CreateDepartment(CreateDepartmentViewModel dvm)
     {

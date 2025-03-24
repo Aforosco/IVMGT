@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Invco.styles.css" asp-append-version="true" />
+</head>
+
+<body class="Admin">
+    <div>
+        <div class="row">
+            <div class="col-md-3">
+                <nav class="sidebar">
+                    <div class="sidebar-top-wrapper">
+                        <div class="sidebar-top">
+                            <a href="#" class="logo_wrapper">
+                                <img src="~/images/Logo.jpg" alt="Logo" class="logo-small" />
+                                <span class="hide company-name">
+                                    TaskFlow
+                                </span>
+                            </a>
+                        </div>
+                        <button class="expand-btn" type="button">
+                        </button>
+                    </div>
+                    <div class="search_wrapper">
+                        <input type="text" placeholder="search..." aria-labelledby="search-icon" />
+                    </div>
+                    <div class="sidebar-links">
+                        <ul>
+                            <li>
+                                <a href="home" title="Home" class="tooltip">
+
+                                    <span class="link">
+                                        Home
+                                    </span>
+                                    <span class="tooltip_content">
+                                        Home
+                                    </span>
+
+                                </a>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div class="seperator"></div>
+                    <div class="sidebar-links">
+                        <ul>
+                            <li>
+                                <a href="GetAllAssets" title="Asset" class="tooltip">
+                                    <span class="link">
+                                        Assets
+                                    </span>
+                                    <span class="tooltip_content">
+                                        Assets
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="seperator"></div>
+                    <div class="sidebar-links">
+                        <ul>
+                            <li>
+                                <a href="GetCategories" title="Category" class="tooltip">
+                                    <span class="link">
+                                        Category
+                                    </span>
+                                    <span class="tooltip_content">
+                                        Category
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="seperator"></div>
+                    <div class="sidebar-links">
+                        <ul>
+                            <li>
+                                <a href="GetDepartments" title="Department" class="tooltip">
+                                    <span class="link">
+                                        Department
+                                    </span>
+                                    <span class="tooltip_content">
+                                        Department
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div class="sidebar_profile">
+                        <div class="avatar_wrapper">
+                            <img class="avatar" src="~/images/avatar.png" alt="Natalia Picture" />
+                            <div class="online_status"></div>
+                        </div>
+                        <div class="avatar_name hide">
+                            <div class="user_name">Admin</div>
+                            <div class="email">admin@gmail.com</div>
+                        </div>
+                        <a href="#logout" class="logout hide">
+
+                        </a>
+                    </div>
+
+                </nav>
+
+            </div>
+            <div class="col-md-9">
+                @RenderBody()
+
+            </div>
+        </div>
+        </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

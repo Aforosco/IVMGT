@@ -1,0 +1,53 @@
+
+@{
+  Layout = "_LayoutPage2";
+ }
+
+<div class="container mt-4">
+    <div class="row g-3">
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="card shadow-sm">
+                <h5 class="card-header bg-primary text-white">Assets</h5>
+                <div class="card-body">
+                    <h5 class="card-title">Total number of Assets</h5>
+                    <p class="card-text fs-4 fw-bold">@ViewBag.Assets</p>
+                    <a href="@Url.Action("GetAllAssets", "Home")" class="btn btn-outline-primary w-100">View Assets</a>
+
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="card shadow-sm">
+                <h5 class="card-header bg-success text-white">Categories</h5>
+                <div class="card-body">
+                    <h5 class="card-title">Total number of Categories</h5>
+                    <p class="card-text fs-4 fw-bold">@ViewBag.Category</p>
+                    <a href="@Url.Action("GetCategories", "Home")" class="btn btn-outline-success w-100">View Categories</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="card shadow-sm">
+                <h5 class="card-header bg-danger text-white">Users</h5>
+                <div class="card-body">
+                    <h5 class="card-title">Total number of Users</h5>
+                    <p class="card-text fs-4 fw-bold">@ViewBag.Users</p>
+                    <a href="@Url.Action("GetUsers", "Home")" class="btn btn-outline-danger w-100">View Users</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 col-sm-12">
+            <div class="card shadow-sm">
+                <h5 class="card-header bg-warning text-dark">Departments</h5>
+                <div class="card-body">
+                    <h5 class="card-title">Total number of Departments</h5>
+                    <p class="card-text fs-4 fw-bold">@ViewBag.Department</p>
+                    <a href="@Url.Action("GetDepartments", "Home")" class="btn btn-outline-warning w-100">View Departments</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

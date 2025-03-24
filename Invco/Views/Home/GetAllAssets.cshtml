@@ -1,5 +1,15 @@
 @model Invco.Models.AllAssetViewModel
 
+@{
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "_LayoutPage2";
+    }
+    else
+    {
+        Layout = "_Layout"; // Default general layout
+    }
+}
 
 
 
@@ -45,7 +55,7 @@
                             <a asp-action="GetAssetDetails" asp-route-id="@item.Id" class="btn btn-info btn-sm">
                                 <i class="fas fa-eye"></i> Details
                             </a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                            <a asp-action="DeleteAsset" asp-route-id="@item.Id" class=" delete btn btn-danger btn-sm">
                                 <i class="fas fa-trash"></i> Delete
                             </a>
                         </td>
@@ -70,4 +80,58 @@
             </ul>
         </nav>
     </div>
-    </body>
+</body>
+
+<script>document.addEventListener('DOMContentLoaded', function () {
+        // Select all delete buttons (assuming they have the class "delete")
+        const deleteButtons = document.querySelectorAll('.delete');
+
+        deleteButtons.forEach(function (button) {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent default link behavior
+                const deleteUrl = this.getAttribute('href');
+                const row = this.closest('tr'); // Find the closest table row
+
+                if (confirm("Are you sure you want to delete this item?")) {
+                    fetch(deleteUrl, {
+                        method: 'POST'
+                    })
+                        .then(function (response) {
+                            if (!response.ok) {
+                                throw new Error(response.statusText);
+                            }
+                            return response.text(); // or response.json(), depending on your API
+                        })
+                        .then(function (data) {
+                            // Fade out the row using CSS transition
+                            row.style.transition = "opacity 0.5s ease";
+                            row.style.opacity = 0;
+                            setTimeout(function () {
+                                row.remove();
+                            }, 500);
+
+                            // Show success toast
+                            Toastify({
+                                text: "Asset has been deleted successfully!",
+                                duration: 3000,
+                                close: true,
+                                gravity: "Top",
+                                position: "right",
+                                backgroundColor: "#28a745"
+                            }).showToast();
+                        })
+                        .catch(function (error) {
+                            // Show error toast if deletion fails
+                            Toastify({
+                                text: "Error deleting item: " + error.message,
+                                duration: 3000,
+                                close: true,
+                                gravity: "top",
+                                position: "right",
+                                backgroundColor: "#dc3545"
+                            }).showToast();
+                        });
+                }
+            });
+        });
+    });</script>

@@ -9,6 +9,7 @@ namespace Invco.Repository
         void InsertCategory(Category C);
         List<Category> GetAllCategories();
         void DeleteCategory(int Id);
+        int GetCategoryCount();
 
 
     }
@@ -36,6 +37,11 @@ namespace Invco.Repository
         {
             _db.Categories.Add(C);
             _db.SaveChanges();
+        }
+
+        public int GetCategoryCount()
+        {
+            return _db.Categories.Count();
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Invco.Service
         AssetViewModel GetSingleAsset(int Id);
         void DeleteAsset(int Id);
         void UpdateAsset(EditAssetViewModel A);
+        int GetAssetCount();
     }
 
     public class AssetService :IAssetService
@@ -112,7 +113,10 @@ namespace Invco.Service
             _iar.UpdateAsset(asset);
         }
 
-        
+        public int GetAssetCount()
+        {
+            return _iar.GetAssetCount();
+        }
 
     }
 }

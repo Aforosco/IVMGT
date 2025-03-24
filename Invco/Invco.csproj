@@ -14,9 +14,7 @@
     <None Remove="Data\Entities\" />
     <None Remove="Repository\" />
     <None Remove="Service\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="wwwroot\Images\Asset.jpg" />
+    <None Remove="Views\Dashboard\" />
   </ItemGroup>
   <ItemGroup>
     <None Update="app.db" CopyToOutputDirectory="PreserveNewest" ExcludeFromSingleFile="true" />
@@ -38,11 +36,13 @@
     <Folder Include="Data\Entities\" />
     <Folder Include="Repository\" />
     <Folder Include="Service\" />
-    <Folder Include="wwwroot\Images\" />
+    <Folder Include="Views\Dashboard\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\fabio-oyXis2kALVg-unsplash.jpg" />
-    <Content Remove="wwwroot\Images\" />
     <Content Remove="wwwroot\Images\Asset.jpg" />
+    <Content Remove="Areas\Identity\Pages\Account\Manage\_dashboard.cshtml" />
+    <Content Remove="wwwroot\images\" />
   </ItemGroup>
 </Project>
