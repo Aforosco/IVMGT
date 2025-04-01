@@ -4,17 +4,19 @@ using Invco.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Invco.Repository
 {
 	public interface IAssetRepo
 	{
 		void InsertAsset(Asset A);
-		List<Asset> GetAllAsset(int page = 1);
-        Task<List<Asset>> GetAllAssetByDepartmentId(int Id, int page = 1);
+		List<Asset> GetAllAsset(int page = 1, string SortColumn = "Id", string IconClass = "fa-sort-asc");
+        List<Asset> GetAllAssetByDepartmentId(int Id, int page = 1);
 		Asset GetSingleAsset(int Id);
 		void DeleteAsset(int Id);
 		void UpdateAsset(Asset A);
         int GetAssetCount();
+        int GetAssetCountbydepartmetID(int Id);
 
 
     }
@@ -35,14 +37,54 @@ namespace Invco.Repository
             _db.SaveChanges();
         }
 
-        public List<Asset> GetAllAsset(int page = 1)
+        public List<Asset> GetAllAsset(int page = 1, string SortColumn = "Id", string IconClass = "fa-sort-asc")
         {
             int pageSize = 10;
-            var assets  =  _db.Assets
-                 .Include(a => a.Category) 
-                 .Include(a => a.Departments)
-                .OrderBy(a=>a.Id).Skip((page-1)*pageSize).ToList();
-            return assets;
+
+            IQueryable<Asset> query = _db.Assets
+                .Include(a => a.Category)
+                .Include(a => a.Departments);
+
+            if (IconClass == "fa-sort-asc")
+            {
+                if (SortColumn == "DepartmentId")
+                {
+                    query = query.OrderBy(o => o.DepartmentId);
+                }
+                else if (SortColumn == "CategoryId")
+                {
+                    query = query.OrderBy(o => o.CategoryId);
+                }
+                else if (SortColumn == "AssetName")
+                {
+                    query = query.OrderBy(o => o.AssetName);
+                }
+                else
+                {
+                    query = query.OrderBy(o => o.Id); 
+                }
+            }
+            else
+            {
+                if (SortColumn == "DepartmentId")
+                {
+                    query = query.OrderByDescending(o => o.DepartmentId);
+                }
+                else if (SortColumn == "CategoryId")
+                {
+                    query = query.OrderByDescending(o => o.CategoryId);
+                }
+                else if (SortColumn == "AssetName")
+                {
+                    query = query.OrderByDescending(o => o.AssetName);
+                }
+                else
+                {
+                    query = query.OrderByDescending(o => o.Id); 
+                }
+            }
+
+            return query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
         }
 
 
@@ -50,10 +92,20 @@ namespace Invco.Repository
         {
             return _db.Assets.Count();
         }
-        public async Task<List<Asset>> GetAllAssetByDepartmentId(int Id, int page =1)
+        public List<Asset> GetAllAssetByDepartmentId(int Id, int page =1)
         {
             int pageSize = 10;
-            return await _db.Assets.Where(d=>d.DepartmentId.Equals(Id)).OrderBy(A => A.Id).Skip((page - 1) * pageSize).ToListAsync();
+             var assetsbydepartment =  _db.Assets.Include(c=>c.Category).Include(d=>d.Departments).Where(d=>d.DepartmentId.Equals(Id)).OrderBy(A => A.Id).Skip((page - 1) * pageSize).ToList();
+            Console.WriteLine(assetsbydepartment);
+
+
+            return assetsbydepartment;
+        }
+        public int GetAssetCountbydepartmetID(int Id)
+        {
+            var assetsbydepartmentcount =  _db.Assets.Include(c=>c.Category).Include(d=>d.Departments).Where(d => d.DepartmentId.Equals(Id)).Count();
+            return assetsbydepartmentcount;
+
         }
 
         public Asset GetSingleAsset(int Id)

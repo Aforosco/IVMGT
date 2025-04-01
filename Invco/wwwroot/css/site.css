@@ -76,6 +76,10 @@ dd {
     height: auto;
 }
 
+.Pbtn{
+    display :inline-flex;
+}
+
 :root {
     --primary-color: #191919;
     --primary: #565DE9;

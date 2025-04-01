@@ -1,39 +1,46 @@
 @model Invco.Models.AllAssetViewModel
 
 @{
-    if (User.IsInRole("Admin"))
-    {
-        Layout = "_LayoutPage2";
-    }
-    else
-    {
-        Layout = "_Layout"; // Default general layout
-    }
+    Layout = User.IsInRole("Admin") ? "_LayoutPage2" : "_Layout";
 }
-
-
-
 
 <body class="container mt-4">
     <h2 class="text-center mb-4">Asset Management</h2>
+    
+    <div class="Pbtn">
+        <p>
+            <a asp-action="InsertAsset" class="btn btn-success">
+                <i class="fas fa-plus-circle"></i> Create New
+            </a>
+        </p>
+        <p class="d-flex justify-content-end px-2">
+            <button id="exportExcel" class="btn btn-success">
+                <i class="fas fa-file-excel"></i> Export to Excel
+            </button>
+            <button id="exportPDF" class="btn btn-danger">
+                <i class="fas fa-file-pdf"></i> Export to PDF
+            </button>
+        </p>
 
-    <p>
-        <a asp-action="InsertAsset" class="btn btn-success">
-            <i class="fas fa-plus-circle"></i> Create New
-        </a>
-    </p>
+    </div>
+   
+    
 
     <div class="table-responsive">
         <table class="table table-striped table-bordered">
-            <thead class="table-dark">
+            <thead class="table-secondary">
                 <tr>
-                    <th>ID</th>
-                    <th>Asset Kind</th>
-                    <th>Asset User</th>
-                    <th>Purchased Date</th>
-                    <th>Asset Category</th>
-                    <th>Serial Number</th>
-                    <th>Dept of Use</th>
+                    @foreach (var column in new[] { "Id", "AssetName", "Asset User", "Purchasedate", "Category", "SerialNumber", "Department" })
+                    {
+                        string sortIcon = ViewBag.SortColumn == column ? ViewBag.IconClass : "fa-sort";
+                        string nextSort = ViewBag.SortColumn == column && ViewBag.IconClass == "fa-sort-desc" ? "fa-sort-asc" : "fa-sort-desc";
+                        <th>
+                            <a href="@Url.Action("GetAllAssets", new { SortColumn = column, IconClass = nextSort })">
+                                @column.Replace("Id", "ID").Replace("AssetName", "Asset Kind").Replace("Purchasedate", "Purchased Date")
+                                <i class="fa @sortIcon"></i>
+                            </a>
+                        </th>
+                    }
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -41,22 +48,22 @@
                 @foreach (var item in Model.Assets)
                 {
                     <tr>
-                        <td>@Html.DisplayFor(modelItem => item.Id)</td>
-                        <td>@Html.DisplayFor(modelItem => item.AssetName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.AssetUser)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Purchasedate)</td>
-                        <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
-                        <td>@Html.DisplayFor(modelItem => item.SerialNumber)</td>
-                        <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                        <td>@item.Id</td>
+                        <td>@item.AssetName</td>
+                        <td>@item.AssetUser</td>
+                        <td>@item.Purchasedate</td>
+                        <td>@item.CategoryName</td>
+                        <td>@item.SerialNumber</td>
+                        <td>@item.DepartmentName</td>
                         <td>
                             <a asp-action="UpdateAssetViewModel" asp-route-id="@item.Id" class="btn btn-primary btn-sm">
-                                <i class="fas fa-edit"></i> Edit
+                                <i class="fas fa-edit"></i>
                             </a>
                             <a asp-action="GetAssetDetails" asp-route-id="@item.Id" class="btn btn-info btn-sm">
-                                <i class="fas fa-eye"></i> Details
+                                <i class="fas fa-eye"></i>
                             </a>
-                            <a asp-action="DeleteAsset" asp-route-id="@item.Id" class=" delete btn btn-danger btn-sm">
-                                <i class="fas fa-trash"></i> Delete
+                            <a asp-action="DeleteAsset" asp-route-id="@item.Id" class="delete btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i>
                             </a>
                         </td>
                     </tr>
@@ -82,56 +89,65 @@
     </div>
 </body>
 
-<script>document.addEventListener('DOMContentLoaded', function () {
-        // Select all delete buttons (assuming they have the class "delete")
-        const deleteButtons = document.querySelectorAll('.delete');
 
-        deleteButtons.forEach(function (button) {
+
+<script>document.addEventListener('DOMContentLoaded', function () {
+        setupDeleteButtons();
+        setupExportPDF();
+        setupExportExcel();
+    });
+
+    function setupDeleteButtons() {
+        document.querySelectorAll('.delete').forEach(button => {
             button.addEventListener('click', function (e) {
-                e.preventDefault(); // Prevent default link behavior
+                e.preventDefault();
                 const deleteUrl = this.getAttribute('href');
-                const row = this.closest('tr'); // Find the closest table row
+                const row = this.closest('tr');
 
                 if (confirm("Are you sure you want to delete this item?")) {
-                    fetch(deleteUrl, {
-                        method: 'POST'
-                    })
-                        .then(function (response) {
-                            if (!response.ok) {
-                                throw new Error(response.statusText);
-                            }
-                            return response.text(); // or response.json(), depending on your API
-                        })
-                        .then(function (data) {
-                            // Fade out the row using CSS transition
-                            row.style.transition = "opacity 0.5s ease";
+                    fetch(deleteUrl, { method: 'POST' })
+                        .then(response => {
+                            if (!response.ok) throw new Error(response.statusText);
+                            row.style.transition = "opacity 0.5s";
                             row.style.opacity = 0;
-                            setTimeout(function () {
-                                row.remove();
-                            }, 500);
-
-                            // Show success toast
-                            Toastify({
-                                text: "Asset has been deleted successfully!",
-                                duration: 3000,
-                                close: true,
-                                gravity: "Top",
-                                position: "right",
-                                backgroundColor: "#28a745"
-                            }).showToast();
+                            setTimeout(() => row.remove(), 500);
+                            Toastify({ text: "Deleted successfully!", duration: 3000, gravity: "top", position: "right", backgroundColor: "#28a745" }).showToast();
                         })
-                        .catch(function (error) {
-                            // Show error toast if deletion fails
-                            Toastify({
-                                text: "Error deleting item: " + error.message,
-                                duration: 3000,
-                                close: true,
-                                gravity: "top",
-                                position: "right",
-                                backgroundColor: "#dc3545"
-                            }).showToast();
+                        .catch(error => {
+                            Toastify({ text: "Error: " + error.message, duration: 3000, gravity: "top", position: "right", backgroundColor: "#dc3545" }).showToast();
                         });
                 }
             });
         });
-    });</script>
+    }
+
+    function setupExportPDF() {
+        const exportPDFButton = document.getElementById('exportPDF');
+        if (!exportPDFButton) return;
+        exportPDFButton.addEventListener('click', function () {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const table = document.querySelector('table');
+            const rows = Array.from(table.querySelectorAll('tr')).map(row =>
+                Array.from(row.querySelectorAll('td, th')).map(cell => cell.innerText)
+            );
+
+            if (rows.length > 1) {
+                doc.autoTable({ head: [rows[0]], body: rows.slice(1) });
+                doc.save('assets.pdf');
+            } else {
+                alert("No data available to export.");
+            }
+        });
+    }
+
+    function setupExportExcel() {
+        const exportExcelButton = document.getElementById('exportExcel');
+        if (!exportExcelButton) return;
+        exportExcelButton.addEventListener('click', function () {
+            const table = document.querySelector('table');
+            const wb = XLSX.utils.table_to_book(table, { sheet: "Assets" });
+            XLSX.writeFile(wb, 'assets.xlsx');
+        });
+    }
+    </script>

@@ -6,6 +6,8 @@ using Invco.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Invco.Service;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+using System.Runtime.ConstrainedExecution;
 
 namespace Invco.Controllers;
 
@@ -15,12 +17,14 @@ public class HomeController : Controller
     private readonly ICategoryService _cs;
     private readonly IDepartmentService _ds;
     private readonly UserManager<ApplicationUser> _userManager;
-    public HomeController(IAssetService ias, ICategoryService cs, IDepartmentService ds, UserManager<ApplicationUser> userManager)
+    private readonly RoleManager<IdentityRole> _roleManager;
+    public HomeController(IAssetService ias, ICategoryService cs, IDepartmentService ds, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _ias = ias;
         _cs = cs;
         _ds = ds;
         _userManager = userManager;
+         _roleManager = roleManager;
     }
 
     
@@ -32,24 +36,72 @@ public class HomeController : Controller
     }
 
     [HttpGet]
-    public IActionResult GetAllAssets()
+    public IActionResult GetAllAssets(int page = 1, string SortColumn ="Id", string IconClass = "fa-sort-asc")
     {
-        var Assets = _ias.GetAllAsset();
+        ViewBag.IconClass = IconClass;
+        ViewBag.SortColumn = SortColumn;
+        var Assets = _ias.GetAllAsset(page, SortColumn, IconClass);
 
 
         return View(Assets);
     }
-
     [HttpGet]
-    public IActionResult GetAssetByDepartmentId(int Id)
+    public async Task<IActionResult> GetAssetByDepartmentId(int page = 1)
     {
-        var Assets = _ias.GetAllAssetByDepartmentId(Id);
+        var userId = _userManager.GetUserId(User);
+        if (userId == null)
+        {
+            return Unauthorized("User not found.");
+        }
 
-        return View(Assets);
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user == null)
+        {
+            return NotFound("User not found.");
+        }
+
+        var roleNames = await _userManager.GetRolesAsync(user);
+
+        var roleIds = _roleManager.Roles
+            .Where(r => roleNames.Contains(r.Name ?? ""))
+            .Select(r => r.Id)
+            .ToList();
+
+        if (!roleIds.Any())
+        {
+            return BadRequest("User has no assigned roles.");
+        }
+
+        var roleId = roleIds.First();
+        int Id = 5; 
+
+        
+        if (roleId == "e3ec8678-e509-40dc-96a0-221f0c8f4382")
+        {
+            Id = 1;
+        }
+        else if (roleId == "7affaec9-895b-4aa2-ac6b-26a3c7ca47a4")
+        {
+            Id = 2;
+        }
+        else if (roleId == "69b16bf1-71f0-4164-993f-b1d76162a8ad")
+        {
+            Id = 3;
+        }
+        else if (roleId == "3313c89d-7dcc-4cee-b6ad-79826808928d")
+        {
+            Id = 4;
+        }
+
+
+        var assets = _ias.GetAllAssetByDepartmentId(Id, page);
+        
+        return View(assets);
     }
 
 
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public IActionResult InsertAsset()
     {
@@ -60,6 +112,7 @@ public class HomeController : Controller
     }
 
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
 
     public IActionResult InsertAsset(CreateAssetViewModel model)
@@ -77,6 +130,7 @@ public class HomeController : Controller
     }
 
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
 
     public void DeleteAsset(int Id)
@@ -86,6 +140,8 @@ public class HomeController : Controller
 
 
     }
+
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public IActionResult UpdateAssetViewModel(int Id)
     {
@@ -121,6 +177,8 @@ public class HomeController : Controller
         return View(model);
     }
 
+
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public IActionResult UpdateAssetViewModel(EditAssetViewModel eavm)
     {
@@ -141,7 +199,7 @@ public class HomeController : Controller
         _ias.UpdateAsset(eavm);
         return RedirectToAction("GetAllAssets");
     }
-
+    [Authorize]
     [HttpGet]
     public IActionResult GetAssetDetails(int Id)
     {
@@ -151,6 +209,7 @@ public class HomeController : Controller
     }
 
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public IActionResult GetCategories()
     {
@@ -159,6 +218,7 @@ public class HomeController : Controller
         return View (cat);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public void DeleteCategory(int Id)
     {
@@ -166,6 +226,8 @@ public class HomeController : Controller
         _cs.DeleteCategory(Id);
 
     }
+
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public IActionResult CreateCategory()
     {
@@ -173,6 +235,7 @@ public class HomeController : Controller
         return View();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public IActionResult CreateCategory(CreateCategoryViewModel cvm)
     {
@@ -182,6 +245,8 @@ public class HomeController : Controller
         return RedirectToAction("GetCategories");
     }
 
+
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public IActionResult GetDepartments()
     {
@@ -190,6 +255,8 @@ public class HomeController : Controller
         return View(Dept);
     }
 
+
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public void DeleteDepartment(int Id)
     {
@@ -199,12 +266,15 @@ public class HomeController : Controller
     }
 
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public IActionResult CreateDepartment()
     {
        
         return View();
     }
+
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public IActionResult CreateDepartment(CreateDepartmentViewModel dvm)
     {

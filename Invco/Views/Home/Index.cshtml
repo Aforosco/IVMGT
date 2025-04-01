@@ -20,8 +20,15 @@
                 Transform the way you manage your products and focus on what matters most – growing your business!
             </p>
 
+            @if (User.Identity?.Name is not null)
+                {
+                    if (User.IsInRole("Admin"))
+                    {
             <a asp-controller="Home" asp-action="GetAllAssets" class=" AssetBtn btn btn-lg btn-secondary">View Assets</a>
+                    }
 
+            <a asp-controller="Home" asp-action="GetAssetByDepartmentId" class=" AssetBtn btn btn-lg btn-secondary">View Assets</a>
+                }
             <div class="accordion accordion-flush" id="accordionFlushExample">
                 <div class="accordion-item">
                     <h2 class="accordion-header">

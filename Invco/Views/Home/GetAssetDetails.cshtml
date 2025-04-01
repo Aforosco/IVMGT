@@ -49,10 +49,17 @@
             <a asp-action="UpdateAssetViewModel" asp-route-id="@Model.Id" class="btn btn-primary">
                 <i class="fas fa-edit"></i> Edit
             </a>
-            <a asp-action="GetAllAssets" class="btn btn-secondary">
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="GetAllAssets" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to List
+                </a>
+            }
+            <a asp-action="GetAssetByDepartmentId" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Back to List
             </a>
         </div>
     </div>
 </body>
 
+2950050941
